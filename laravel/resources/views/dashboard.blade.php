@@ -304,7 +304,6 @@
 
     // SORT
     document.addEventListener('DOMContentLoaded', function () {
-        // Event listeners for the "All", "Called", and "Uncalled" buttons
         document.getElementById('sortAll').addEventListener('click', function () {
             filterRows('all');
         });
@@ -317,31 +316,26 @@
             filterRows('uncalled');
         });
 
-        // Function to filter rows based on the status
         function filterRows(status) {
             let matchFound = false;
 
-            // Loop through table rows
             document.querySelectorAll('#users-table tbody tr').forEach(row => {
-                // Extract the status text (clean up by trimming and converting to lowercase)
                 const statusText = row.querySelector('td:nth-child(4)').textContent.trim().toLowerCase();
 
-                // Adjust the filtering logic to check for exact matches
                 if (status === 'all') {
-                    row.style.display = '';  // Show all rows
+                    row.style.display = '';
                     matchFound = true;
                 } else if (status === 'called' && statusText === 'called') {
-                    row.style.display = '';  // Show rows with 'Called' status
+                    row.style.display = '';
                     matchFound = true;
                 } else if (status === 'uncalled' && statusText === 'uncalled') {
-                    row.style.display = '';  // Show rows with 'Uncalled' status
+                    row.style.display = '';
                     matchFound = true;
                 } else {
-                    row.style.display = 'none';  // Hide rows that don't match
+                    row.style.display = 'none';
                 }
             });
 
-            // Show or hide the "No results found" message based on whether there are matches
             if (!matchFound) {
                 document.querySelector("table").classList.add('none');
                 document.getElementById('user_found').classList.remove('hidden');

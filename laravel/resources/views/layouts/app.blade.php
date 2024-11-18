@@ -4,7 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Smart English') }}</title>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
         <link rel="icon" href="{{ asset('smart_ico.png') }}">
@@ -46,63 +48,76 @@
         @livewireScripts
     </body>
 </html>
-
+<script src="https://kit.fontawesome.com/6d6de8a581.js" crossorigin="anonymous"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let step = 0;
+        let gradientSpeed = 0.02;
+        let backgroundImage = '{{ session("background_image") }}'; // Initial background image from the server.
 
-    let colors = [[62, 35, 255],
-        [60, 255, 60],
-        [255, 35, 98],
-        [45, 175, 230],
-        [255, 0, 255],
-        [255, 128, 0]];
+        // Default gradient colors
+        const defaultColors = [
+            [236, 255, 220],
+            [236, 255, 220],
+            [236, 255, 220],
+            [236, 255, 220],
+            [236, 255, 220],
+            [236, 255, 220]
+        ];
 
-    let step = 0;
-
-    let colorIndices = [0,1,2,3];
-
-    //transition speed
-    let gradientSpeed = 0.002;
-
-    function updateGradient()
-    {
-
-        if ( $===undefined ) return;
-
-        let c0_0 = colors[colorIndices[0]];
-        let c0_1 = colors[colorIndices[1]];
-        let c1_0 = colors[colorIndices[2]];
-        let c1_1 = colors[colorIndices[3]];
-
-        let istep = 1 - step;
-        let r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
-        let g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
-        let b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
-        let color1 = "rgb("+r1+","+g1+","+b1+")";
-
-        let r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
-        let g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
-        let b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
-        let color2 = "rgb("+r2+","+g2+","+b2+")";
-
-        $('#gradient').css({
-            background: "-webkit-gradient(linear, left top, right top, from("+color1+"), to("+color2+"))"}).css({
-            background: "-moz-linear-gradient(left, "+color1+" 0%, "+color2+" 100%)"});
-
-        step += gradientSpeed;
-        if ( step >= 1 )
-        {
-            step %= 1;
-            colorIndices[0] = colorIndices[1];
-            colorIndices[2] = colorIndices[3];
-
-            //pick two new target color indices
-            //do not pick the same as the current one
-            colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
-            colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
-
+        // Utility to generate random colors
+        function generateRandomColor() {
+            return [
+                Math.floor(Math.random() * 256),
+                Math.floor(Math.random() * 256),
+                Math.floor(Math.random() * 256)
+            ];
         }
-    }
 
-    setInterval(updateGradient,10);
+        // Function to apply dynamic gradient
+        function dynamicGradient() {
+            if (defaultColors.length < 4) return;
 
+            const c0_0 = defaultColors[0];
+            const c0_1 = defaultColors[1];
+            const c1_0 = defaultColors[2];
+            const c1_1 = defaultColors[3];
+
+            const istep = 1 - step;
+            const r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+            const g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+            const b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+            const color1 = `rgb(${r1},${g1},${b1})`;
+
+            const r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+            const g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+            const b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+            const color2 = `rgb(${r2},${g2},${b2})`;
+
+            // Check if a background image exists
+            if (backgroundImage) {
+                document.body.style.background = `url('/storage/${backgroundImage}') no-repeat center center fixed`;
+                document.body.style.backgroundSize = 'cover';
+            } else {
+                document.body.style.background = `linear-gradient(to right, ${color1}, ${color2})`;
+            }
+
+            step += gradientSpeed;
+            if (step >= 1) {
+                step %= 1;
+                defaultColors[0] = defaultColors[1];
+                defaultColors[2] = defaultColors[3];
+
+                defaultColors[1] = generateRandomColor();
+                defaultColors[3] = generateRandomColor();
+            }
+        }
+
+
+        // Interval for linear gradient
+        setInterval(dynamicGradient, 200);
+
+    });
 </script>
+
+

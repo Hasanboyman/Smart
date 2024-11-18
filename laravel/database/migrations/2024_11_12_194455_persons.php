@@ -10,14 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('table', function (Blueprint $table) {
+        Schema::create('persons', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->enum('group', ['English', 'It', 'Russian'])->nullable();
+            $table->enum('group', ['English', 'It', 'Russian']);
             $table->integer('user_id')->unique();
             $table->string('birthday')->nullable();
             $table->string('status');
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
             $table->timestamps();
         });
     }

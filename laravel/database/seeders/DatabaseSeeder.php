@@ -2,22 +2,33 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\persons;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     *
+     * @return void
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $faker = Faker::create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Create 20 fake records
+        for ($i = 0; $i < 90; $i++) {
+            persons::create([
+                'full_name' => $faker->name,
+                'group' => $faker->randomElement(['English', 'It',]),
+                'user_id' => $faker->unique()->randomNumber(5, 999),
+                'birthday' => $faker->date(),
+                'status' => $faker->randomElement(['Called', 'Uncalled']),
+                'gender' => $faker->randomElement(['male', 'female']),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

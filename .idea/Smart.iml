@@ -130,5 +130,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="flowbite" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="animate.css" level="application" />
+    <orderEntry type="library" name="6d6de8a581" level="application" />
   </component>
 </module>

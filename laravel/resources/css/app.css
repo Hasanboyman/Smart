@@ -57,4 +57,13 @@
 }
 
 
+.pagination-btn {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
 
+.pagination-btn:hover {
+    background-color: #f0f0f0;
+}

@@ -16,6 +16,46 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
+                {{--                Report--}}
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('reports') }}" :active="request()->routeIs('reports')">
+                        {{ __('Reports') }}
+                    </x-nav-link>
+                </div>
+            </div>
+
+            {{--            Succesfull Message--}}
+            <div id="notification" class="col-sm-12 hidden">
+                <div id="notification"
+                     class="fixed top-2.5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg flex items-center justify-start font-montserrat text-base font-light z-50">
+                    <button id="notification" type="button" class="text-xl text-green-500" data-dismiss="alert">
+                    <span id="notification" aria-hidden="true"><a>
+                         <i id="notification" class="fa fa-times text-green-500 text-xl"></i>
+                    </a></span>
+                        <span id="notification" class="sr-only">Close</span>
+                    </button>
+                    <i id="notification"
+                       class="start-icon far fa-check-circle text-2xl animate__animated animate__tada gap-1 p-2"></i>
+                    <div id="notification"><strong class="font-semibold" id="notification-message"></strong></div>
+                </div>
+            </div>
+            {{--        Error Message--}}
+            <div id="error-notification" class="col-sm-12 hidden">
+                <div
+                    class="fixed top-2.5 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded shadow-lg flex items-center justify-start font-montserrat text-base font-light z-50">
+                    <button type="button" class="text-xl text-red-500" data-dismiss="alert">
+            <span aria-hidden="true">
+                <i class="fa fa-times text-red-500 text-xl"></i>
+            </span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="start-icon far fa-times-circle text-2xl animate__animated animate__tada gap-1 p-2"></i>
+                    <div>
+                        <strong class="font-semibold" id="error-message"></strong>
+                    </div>
+                </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

@@ -11,7 +11,7 @@
                 <div
                     class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 pt-4 bg-white dark:bg-gray-900">
                     <div>
-                        <button id="dropdownActionButton status_text" data-dropdown-toggle="dropdownAction"
+                        <button id="multiLevelDropdownButton status_text" data-dropdown-toggle="dropdownAction"
                                 class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                                 type="button">
                             <span id="status_text">Sort by Status</span>
@@ -167,9 +167,17 @@
 
                             </select>
                         </div>
+
+                        <div class="col-span-2">
+                            <label for="comment" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">User
+                                Comment</label>
+                            <textarea id="comment" name="comment" rows="4"
+                                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                      placeholder="Write User comment here"></textarea>
+                        </div>
                     </div>
 
-                    <button type="submit" id="update-btn"
+                    <button data-bs-toggle="modal" type="submit" id="update-btn"
                             class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                              xmlns="http://www.w3.org/2000/svg">
@@ -194,6 +202,8 @@
     let user_id;
     const modal = document.getElementById("crud-modal");
     const closeModalBtn = document.getElementById("closeModalBtn");
+    let currentPage;
+    let searching;
 
 
     if (closeModalBtn) {
@@ -234,7 +244,7 @@
                     ${statusCell}
                     <td class="px-6 py-4">${user.gender}</td>
                     <td class="px-6 py-4">
-                        <button onclick="openModal(${user.id}, '${user.full_name}', '${user.group}', '${user.gender}', '${user.status}')" class="text-blue-600 hover:text-blue-800">Edit</button>
+                        <button onclick="openModal(${user.id}, '${user.full_name}', '${user.group}', '${user.gender}', '${user.comment}' ,'${user.status}')" class="text-blue-600 hover:text-blue-800">Edit</button>
                     </td>
                 `;
 
@@ -251,7 +261,7 @@
     });
 
 
-    function openModal(id, full_name, group, gender, status) {
+    function openModal(id, full_name, group, gender, comment, status) {
         modal.classList.remove("hidden");
         user_id = id;
         document.getElementById("name").value = full_name;
@@ -277,6 +287,14 @@
                 groupSelect.value = "English";
                 console.warn("Group option not found for value:", group);
             }
+        }
+
+        const comments = document.getElementById('comment');
+        if (comment !== null) {
+            comments.value = comment;
+        } else if (comments.value == null) {
+            let as = comments.innerHTML = ''
+            console.log(as)
         }
 
         // Set status
@@ -337,6 +355,9 @@
     let is_Sorting = false;
     let is_status = false
     let status_name;
+    let called_count = 0;
+    let uncalled_count = 0;
+    let total_count = 0;
 
 
 
@@ -350,6 +371,7 @@
             status_name = ''
             filterRows('all');
             is_Sorting = false;
+            updateStatus(status_name)
             document.getElementById('table-search-users').placeholder = 'Search the User' + status_name
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sorted by Called/g, 'Sort by Status').replace(/Sorted by Uncalled/g, 'Sort by Status');
         });
@@ -358,6 +380,7 @@
             status_name = 'called'
             filterRows('called');
             is_Sorting = true;
+            updateStatus(status_name)
             document.getElementById('table-search-users').placeholder = 'Search the ' + status_name
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Called').replace(/Sorted by Uncalled/g, 'Sorted by Called');
         });
@@ -366,6 +389,7 @@
             status_name = 'uncalled'
             filterRows('uncalled');
             is_Sorting = true;
+            updateStatus(status_name)
             document.getElementById('table-search-users').placeholder = 'Search the ' + status_name
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Uncalled').replace(/Sorted by Called/g, 'Sorted by Uncalled');
         });
@@ -380,19 +404,23 @@
                 if (status === 'all') {
                     row.style.display = '';
                     matchFound = true;
+                    total_count++
                     is_status = false
                 } else if (status === 'called' && statusText === 'called') {
                     row.style.display = '';
                     matchFound = true;
+                    called_count++
                     is_status = true
                 } else if (status === 'uncalled' && statusText === 'uncalled') {
                     row.style.display = '';
                     matchFound = true;
+                    uncalled_count++
                     is_status = true
                 } else {
                     row.style.display = 'none';
                 }
             });
+            console.log('called count', called_count, 'uncalled count', uncalled_count, 'all', total_count)
 
             if (!matchFound) {
                 document.querySelector("table").classList.add('none');
@@ -407,13 +435,17 @@
 
     // SEARCH
 
+
     document.getElementById('table-search-users').addEventListener('input', function (e) {
+        searching = true
         const searchTerm = e.target.value.toLowerCase();
         const table = document.querySelector("table");
         const userFound = document.getElementById('user_found');
 
         let matchFound = false;
         is_Sorting = searchTerm !== '';
+        currentPage = 1;
+        fetchPaginationData()
 
         document.querySelectorAll('#users-table tbody tr').forEach(row => {
             let fullName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
@@ -433,6 +465,7 @@
         } else {
             table.classList.remove('hidden');
             userFound.classList.add('hidden');
+            searching = false
         }
 
         checker();
@@ -447,6 +480,8 @@
         const genderElement = document.querySelector("input[name='myGender']:checked");
         const groupElement = document.getElementById('group');
         const statusElement = document.getElementById('status');
+        const commentElement = document.getElementById('comment')
+
 
         if (!fullNameElement || !genderElement || !groupElement || !statusElement) {
             console.error("One or more form elements are missing.");
@@ -457,7 +492,8 @@
             full_name: fullNameElement.value,
             gender: genderElement.value,
             group: groupElement.value,
-            status: statusElement.value
+            status: statusElement.value,
+            comment: commentElement.value
         };
 
 
@@ -506,105 +542,131 @@
         });
     });
 
+    // Pagination's
 
-    $.ajax({
-        type: "GET",
-        url: `/get/pagination`,
-        headers: {
-            'X-CSRF-TOKEN': '{{csrf_token()}}',
-        },
-        success: function (response) {
 
-            let currentPage = response.current_page;
-            let totalPages = response.total_pages;
+    function fetchPaginationData() {
+        $.ajax({
+            type: "GET",
+            url: `/get/pagination`,
+            headers: {
+                'X-CSRF-TOKEN': '{{csrf_token()}}',
+            },
+            success: function (response) {
 
-            if (!currentPage || !totalPages) {
-                console.error('Pagination data is missing or incorrect.');
-                return;
-            }
+                let currentPage = response.current_page;
+                let totalPages = response.total_pages;
+                let called_count = response.called_count;
+                let uncalled_count = response.uncalled_count;
 
-            let usersTableBody = document.querySelector('#pagination');
-            usersTableBody.innerHTML = '';
-
-            function addButton(pageNumber, isCurrent) {
-                let button = document.createElement('button');
-                button.classList.add('px-4', 'py-2', 'rounded', 'mr-2');
-                button.innerHTML = pageNumber;
-
-                if (isCurrent) {
-                    button.classList.add('bg-blue-700', 'text-white');
-                    button.disabled = true;
-                } else {
-                    button.classList.add('bg-blue-500', 'text-white');
-                    button.onclick = function () {
-                        fetchPage(pageNumber);
-                    };
+                if (!currentPage || !totalPages) {
+                    console.error('Pagination data is missing or incorrect.');
+                    return;
                 }
 
-                usersTableBody.appendChild(button);
-            }
+                // Update totalPages based on status_name
+                if (status_name === 'called') {
+                    totalPages = called_count;
+                    console.log('status name', status_name);
+                } else if (status_name === 'uncalled') {
+                    totalPages = uncalled_count;
+                    console.log(status_name, 'count : ', uncalled_count)
 
-            function fetchPage(pageNumber) {
-                scrollToPage(pageNumber);
-                currentPage = pageNumber;
-                renderPagination();
-            }
+                } else {
+                    console.log('status name', status_name);
+                }
 
-            // Function to handle scrolling to a page
-            function scrollToPage(pageNumber) {
-                const tableContainer = document.getElementById('table-container');
-                const scrollAmount = 475 * (pageNumber - 1); // Adjust as needed
-                tableContainer.scrollTo({
-                    top: scrollAmount,
-                    behavior: 'smooth'
-                });
-            }
-
-            function renderPagination() {
+                let usersTableBody = document.querySelector('#pagination');
                 usersTableBody.innerHTML = '';
 
-                addButton(1, currentPage === 1);
+                function addButton(pageNumber, isCurrent) {
+                    let button = document.createElement('button');
+                    button.classList.add('px-4', 'py-2', 'rounded', 'mr-2');
+                    button.innerHTML = pageNumber;
 
-                if (totalPages > 5) {
-                    if (currentPage > 3) {
-                        let ellipsis = document.createElement('span');
-                        ellipsis.classList.add('px-4', 'py-2');
-                        ellipsis.innerHTML = '...';
-                        usersTableBody.appendChild(ellipsis);
+                    if (isCurrent) {
+                        button.classList.add('bg-blue-700', 'text-white');
+                        button.disabled = true;
+                    } else {
+                        button.classList.add('bg-blue-500', 'text-white');
+                        button.onclick = function () {
+                            fetchPage(pageNumber);
+                        };
                     }
 
-                    let startPage = Math.max(2, currentPage - 1);
-                    let endPage = Math.min(totalPages - 1, currentPage + 1);
+                    usersTableBody.appendChild(button);
+                }
 
-                    for (let i = startPage; i <= endPage; i++) {
-                        addButton(i, i === currentPage);
+                function fetchPage(pageNumber) {
+                    scrollToPage(pageNumber);
+                    currentPage = pageNumber;
+                    renderPagination();
+                }
+
+                // Function to handle scrolling to a page
+                function scrollToPage(pageNumber) {
+                    const tableContainer = document.getElementById('table-container');
+                    const scrollAmount = 475 * (pageNumber - 1); // Adjust as needed
+                    tableContainer.scrollTo({
+                        top: scrollAmount,
+                        behavior: 'smooth'
+                    });
+                }
+
+                function renderPagination() {
+                    usersTableBody.innerHTML = '';
+
+                    addButton(1, currentPage === 1);
+
+                    if (totalPages > 5) {
+                        if (currentPage > 3) {
+                            let ellipsis = document.createElement('span');
+                            ellipsis.classList.add('px-4', 'py-2');
+                            ellipsis.innerHTML = '...';
+                            usersTableBody.appendChild(ellipsis);
+                        }
+
+                        let startPage = Math.max(2, currentPage - 1);
+                        let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+                        for (let i = startPage; i <= endPage; i++) {
+                            addButton(i, i === currentPage);
+                        }
+
+                        if (currentPage < totalPages - 2) {
+                            let ellipsis = document.createElement('span');
+                            ellipsis.classList.add('px-4', 'py-2');
+                            ellipsis.innerHTML = '...';
+                            usersTableBody.appendChild(ellipsis);
+                        }
+                    } else {
+                        // Show all pages if total pages are <= 5
+                        for (let i = 2; i <= totalPages; i++) {
+                            addButton(i, i === currentPage);
+                        }
                     }
 
-                    if (currentPage < totalPages - 2) {
-                        let ellipsis = document.createElement('span');
-                        ellipsis.classList.add('px-4', 'py-2');
-                        ellipsis.innerHTML = '...';
-                        usersTableBody.appendChild(ellipsis);
-                    }
-                } else {
-                    // Show all pages if total pages are <= 5
-                    for (let i = 2; i <= totalPages; i++) {
-                        addButton(i, i === currentPage);
+                    // Always show the last page button
+                    if (totalPages > 1) {
+                        addButton(totalPages, currentPage === totalPages);
                     }
                 }
 
-                // Always show the last page button
-                if (totalPages > 1) {
-                    addButton(totalPages, currentPage === totalPages);
-                }
+                renderPagination();
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX request failed: ', error);
             }
+        });
+    }
 
-            renderPagination();
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX request failed: ', error);
-        }
-    });
+    fetchPaginationData();
+
+    function updateStatus(status_name) {
+        console.log('Status changed to:', status_name);
+        fetchPaginationData();
+    }
+
 
 
     function checker() {
@@ -615,7 +677,7 @@
             pagination.classList.add('hidden');
         } else {
             const matchFound = document.querySelectorAll('#users-table tbody tr:not([style*="display: none"])').length > 0;
-            if (matchFound) {
+            if (matchFound && !searching) {
                 pagination.classList.remove('hidden');
             } else {
                 pagination.classList.add('hidden');

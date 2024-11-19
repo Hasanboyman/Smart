@@ -44,3 +44,6 @@ Route::post('/background/update', [UsersController::class, 'updateBackground']);
 
 Route::post('/background/delete', [UsersController::class, 'Image_delete'])->name('background.delete');
 
+Route::get('/css/app.css', function () {
+    return asset('app.css');
+});

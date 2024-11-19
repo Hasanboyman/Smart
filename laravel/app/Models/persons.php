@@ -16,6 +16,7 @@ class persons extends Authenticatable
         'user_id',
         'group',
         'status',
+        'comment',
         'gender',
         'birthday',
     ];

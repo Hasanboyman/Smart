@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->enum('group', ['English', 'It', 'Russian']);
             $table->integer('user_id')->unique();
             $table->string('birthday')->nullable();
+            $table->text('comment');
             $table->string('status');
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->timestamps();

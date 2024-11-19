@@ -99,16 +99,23 @@ class UsersController extends Controller
 
         $totalItems = persons::all()->count();
 
-        $totalPages = ceil($totalItems / 8.5);
+        $totalPages = ceil(($totalItems - 8) / 9);
 
         $currentPage = $request->query('page', 1);
 
-        $data = persons::skip(($currentPage - 1) * 8.5)->take(8.5)->get();
+        $called_count = persons::where('status', 'called')->count();
+
+        $called_count = ceil(($called_count - 8) / 9);
+
+        $uncalled_count = persons::where('status', 'uncalled')->count();
+
+        $uncalled_count = ceil(($uncalled_count - 8) / 9);
 
         return response()->json([
             'current_page' => $currentPage,
-            'total_pages' => $totalPages - 1,
-            'data' => $data,
+            'total_pages' => $totalPages + 1,
+            'called_count' => $called_count + 1,
+            'uncalled_count' => $uncalled_count + 1,
         ]);
     }
 

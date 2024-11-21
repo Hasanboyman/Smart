@@ -90,7 +90,7 @@ class UsersController extends Controller
 
     public function getGroups()
     {
-        $groups = ['English', 'It'];
+        $groups = ['English', 'It', 'Russian'];
         return response()->json($groups);
     }
 

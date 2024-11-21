@@ -11,11 +11,11 @@
                 <div
                     class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 pt-4 bg-white dark:bg-gray-900">
                     <div>
-                        <button id="multiLevelDropdownButton status_text" data-dropdown-toggle="dropdownAction"
-                                class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                        <!-- Main Button -->
+                        <button id="multiLevelDropdownButton" data-dropdown-toggle="dropdownAction"
+                                class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                                 type="button">
                             <span id="status_text">Sort by Status</span>
-
                             <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                  fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -23,24 +23,72 @@
                             </svg>
                         </button>
 
+                        <!-- First-Level Dropdown -->
                         <div id="dropdownAction"
                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                             <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                                aria-labelledby="dropdownActionButton">
-                                <li>
+                                aria-labelledby="multiLevelDropdownButton">
                                 <li id="sortAll" value="all"
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                     All
                                 </li>
                                 <li>
-                                <li id="sortCalled" value="Called"
-                                    class="block  px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    Called
+                                    <button id="doubleDropdownButton" data-dropdown-toggle="doubleDropdown"
+                                            data-dropdown-placement="right-start"
+                                            class="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Sort by Groups
+                                        <svg class="w-2.5 h-2.5 ms-3 rtl:rotate-180" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                  stroke-width="2" d="m1 9 4-4-4-4"/>
+                                        </svg>
+                                    </button>
+                                    <div id="doubleDropdown"
+                                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                            <li id="sortEnglish" value="English"
+                                                class="block  px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">
+                                                English
+                                            </li>
+                                            <li>
+                                            <li id="sortIt" value="It"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">
+                                                It
+                                            </li>
+                                            <li id="sortRussian" value="Russian"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">
+                                                Russian
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
+
+                                <!-- Nested Dropdown: Sort by Group -->
                                 <li>
-                                <li id="sortUncalled" value="Uncalled"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    UnCalled
+                                    <button id="groupDropdownButton" data-dropdown-toggle="groupDropdown"
+                                            data-dropdown-placement="right-start"
+                                            class="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        Sort by Status
+                                        <svg class="w-2.5 h-2.5 ms-3 rtl:rotate-180" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                  stroke-width="2" d="m1 9 4-4-4-4"/>
+                                        </svg>
+                                    </button>
+                                    <div id="groupDropdown"
+                                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                            <li id="sortCalled" value="Called"
+                                                class="block  px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">
+                                                Called
+                                            </li>
+                                            <li>
+                                            <li id="sortUncalled" value="Uncalled"
+                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">
+                                                UnCalled
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -293,8 +341,7 @@
         if (comment !== null) {
             comments.value = comment;
         } else if (comments.value == null) {
-            let as = comments.innerHTML = ''
-            console.log(as)
+            comments.innerHTML = ''
         }
 
         // Set status
@@ -355,6 +402,7 @@
     let is_Sorting = false;
     let is_status = false
     let status_name;
+    let groups_name
     let called_count = 0;
     let uncalled_count = 0;
     let total_count = 0;
@@ -394,12 +442,41 @@
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Uncalled').replace(/Sorted by Called/g, 'Sorted by Uncalled');
         });
 
+        document.getElementById('sortRussian').addEventListener('click', function () {
+            groups_name = 'russian'
+            filterRows('Russian');
+            is_Sorting = true;
+            updateStatus(groups_name);
+            document.getElementById('table-search-users').placeholder = `Search the ` + groups_name + ' groups'
+            document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Called').replace(/Sorted by Uncalled/g, 'Sorted by Called');
+        });
+
+        document.getElementById('sortIt').addEventListener('click', function () {
+            groups_name = 'it'
+            filterRows('It');
+            is_Sorting = true;
+            updateStatus(groups_name)
+            document.getElementById('table-search-users').placeholder = `Search the ` + groups_name + ' groups'
+            document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Uncalled').replace(/Sorted by Called/g, 'Sorted by Uncalled');
+        });
+
+
+        document.getElementById('sortEnglish').addEventListener('click', function () {
+            groups_name = 'english'
+            filterRows('English');
+            is_Sorting = true;
+            updateStatus(groups_name)
+            document.getElementById('table-search-users').placeholder = `Search the ` + groups_name + ' groups'
+            document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Called').replace(/Sorted by Uncalled/g, 'Sorted by Called');
+        });
+
 
         function filterRows(status) {
             let matchFound = false;
 
             document.querySelectorAll('#users-table tbody tr').forEach(row => {
                 const statusText = row.querySelector('td:nth-child(4)').textContent.trim().toLowerCase();
+                const groupText = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
 
                 if (status === 'all') {
                     row.style.display = '';
@@ -416,11 +493,25 @@
                     matchFound = true;
                     uncalled_count++
                     is_status = true
+                } else if (status === 'English' && groupText === 'english') {
+                    row.style.display = '';
+                    matchFound = true;
+                    called_count++
+                    is_status = true
+                } else if (status === 'It' && groupText === 'it') {
+                    row.style.display = '';
+                    matchFound = true;
+                    uncalled_count++
+                    is_status = true
+                } else if (status === 'Russian' && groupText === 'russian') {
+                    row.style.display = '';
+                    matchFound = true;
+                    uncalled_count++
+                    is_status = true
                 } else {
                     row.style.display = 'none';
                 }
             });
-            console.log('called count', called_count, 'uncalled count', uncalled_count, 'all', total_count)
 
             if (!matchFound) {
                 document.querySelector("table").classList.add('none');
@@ -450,8 +541,12 @@
         document.querySelectorAll('#users-table tbody tr').forEach(row => {
             let fullName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
             const statusText = row.querySelector('td:nth-child(4)').textContent.trim().toLowerCase();
+            const groupText = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
 
-            if (fullName.includes(searchTerm) && (!is_status || statusText === status_name)) {
+            // console.log(groupText)
+
+            if (fullName.includes(searchTerm) && (!is_status || statusText === status_name || groupText === groups_name)) {
+                console.log(groupText, groups_name)
                 row.style.display = '';
                 matchFound = true;
             } else {
@@ -564,7 +659,6 @@
                     return;
                 }
 
-                // Update totalPages based on status_name
                 if (status_name === 'called') {
                     totalPages = called_count;
                     console.log('status name', status_name);

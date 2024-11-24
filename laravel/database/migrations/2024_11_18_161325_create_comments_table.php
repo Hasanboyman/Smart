@@ -10,9 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->text('message');
+            $table->text('feedback')->nullable();
+            $table->text('rating');
+            $table->text('title');
+            $table->string('status')->default('pending');
             $table->foreignId('person_id')->constrained('persons');
             $table->integer('user_id')->unique();
             $table->timestamps();

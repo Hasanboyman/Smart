@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Reports;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,10 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/reports', function () {
-    return view('reports');
-})->name('reports');
+Route::get('/css/app.css', function () {
+    return asset('app.css');
+});
+
 
 Route::get('/users', [UsersController::class, 'index']);
 
@@ -39,11 +41,10 @@ Route::get('/get/groups', [UsersController::class, 'getGroups']);
 
 Route::get('/get/pagination', [UsersController::class, 'pagination']);
 
-
 Route::post('/background/update', [UsersController::class, 'updateBackground']);
 
 Route::post('/background/delete', [UsersController::class, 'Image_delete'])->name('background.delete');
 
-Route::get('/css/app.css', function () {
-    return asset('app.css');
-});
+Route::get('/reports',[Reports::class, 'index'])->name('reports');
+
+Route::put('/reports/{id}',[Reports::class, 'update'])->name('reports.update');

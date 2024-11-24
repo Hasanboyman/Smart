@@ -67,3 +67,24 @@
 .pagination-btn:hover {
     background-color: #f0f0f0;
 }
+
+.datatable-top{
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+.datatable-pagination-list{
+    display: flex;
+    gap: 15px;
+}
+
+.datatable-bottom{
+    height: 50px;
+    padding: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    background: transparent;
+}

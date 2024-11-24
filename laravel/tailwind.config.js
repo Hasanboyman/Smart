@@ -12,6 +12,7 @@ export default {
     ],
 
     theme: {
+        darkMode: 'class', // or 'media'
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
@@ -19,5 +20,10 @@ export default {
         },
     },
 
-    plugins: [forms, typography],
+    plugins:[
+        require('flowbite/plugin')({
+        datatables: true,
+        }),
+        [forms, typography]
+    ]
 };

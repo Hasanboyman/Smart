@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight select-none">
             {{ __('Smart English') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 select-none">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg overflow-hidden">
                 <div
-                    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 pt-4 bg-white dark:bg-gray-900">
+                    class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 pt-4 bg-white dark:bg-gray-900 p-6">
                     <div>
                         <!-- Main Button -->
                         <button id="multiLevelDropdownButton" data-dropdown-toggle="dropdownAction"
@@ -419,6 +419,7 @@
             status_name = ''
             filterRows('all');
             is_Sorting = false;
+            groups_name = ''
             updateStatus(status_name)
             document.getElementById('table-search-users').placeholder = 'Search the User' + status_name
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sorted by Called/g, 'Sort by Status').replace(/Sorted by Uncalled/g, 'Sort by Status');
@@ -428,6 +429,7 @@
             status_name = 'called'
             filterRows('called');
             is_Sorting = true;
+            groups_name = ''
             updateStatus(status_name)
             document.getElementById('table-search-users').placeholder = 'Search the ' + status_name
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Called').replace(/Sorted by Uncalled/g, 'Sorted by Called');
@@ -437,6 +439,7 @@
             status_name = 'uncalled'
             filterRows('uncalled');
             is_Sorting = true;
+            groups_name = ''
             updateStatus(status_name)
             document.getElementById('table-search-users').placeholder = 'Search the ' + status_name
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Uncalled').replace(/Sorted by Called/g, 'Sorted by Uncalled');
@@ -445,6 +448,7 @@
         document.getElementById('sortRussian').addEventListener('click', function () {
             groups_name = 'russian'
             filterRows('Russian');
+            status_name = ''
             is_Sorting = true;
             updateStatus(groups_name);
             document.getElementById('table-search-users').placeholder = `Search the ` + groups_name + ' groups'
@@ -455,6 +459,7 @@
             groups_name = 'it'
             filterRows('It');
             is_Sorting = true;
+            status_name = ''
             updateStatus(groups_name)
             document.getElementById('table-search-users').placeholder = `Search the ` + groups_name + ' groups'
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Uncalled').replace(/Sorted by Called/g, 'Sorted by Uncalled');
@@ -465,6 +470,7 @@
             groups_name = 'english'
             filterRows('English');
             is_Sorting = true;
+            status_name = ''
             updateStatus(groups_name)
             document.getElementById('table-search-users').placeholder = `Search the ` + groups_name + ' groups'
             document.getElementById('status_text').innerHTML = document.getElementById('status_text').innerHTML.replace(/Sort by Status/g, 'Sorted by Called').replace(/Sorted by Uncalled/g, 'Sorted by Called');
@@ -653,6 +659,10 @@
                 let totalPages = response.total_pages;
                 let called_count = response.called_count;
                 let uncalled_count = response.uncalled_count;
+                let it_count = response.it_count;
+                let eng_count = response.eng_count;
+                let rus_count = response.rus_count;
+                let endPage;
 
                 if (!currentPage || !totalPages) {
                     console.error('Pagination data is missing or incorrect.');
@@ -665,6 +675,18 @@
                 } else if (status_name === 'uncalled') {
                     totalPages = uncalled_count;
                     console.log(status_name, 'count : ', uncalled_count)
+
+                } else if (groups_name === 'it') {
+                    totalPages = it_count;
+                    console.log(status_name, 'count : ', it_count)
+
+                } else if (groups_name === 'russian') {
+                    totalPages = rus_count;
+                    console.log(status_name, 'count : ', rus_count)
+
+                } else if (groups_name === 'english') {
+                    totalPages = eng_count;
+                    console.log(status_name, 'count : ', eng_count)
 
                 } else {
                     console.log('status name', status_name);
@@ -721,7 +743,7 @@
                         }
 
                         let startPage = Math.max(2, currentPage - 1);
-                        let endPage = Math.min(totalPages - 1, currentPage + 1);
+                        endPage = Math.min(totalPages - 1, currentPage + 1);
 
                         for (let i = startPage; i <= endPage; i++) {
                             addButton(i, i === currentPage);
@@ -741,7 +763,7 @@
                     }
 
                     // Always show the last page button
-                    if (totalPages > 1) {
+                    if (totalPages > 1 && totalPages > endPage  ) {
                         addButton(totalPages, currentPage === totalPages);
                     }
                 }

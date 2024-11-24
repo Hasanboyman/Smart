@@ -9,6 +9,7 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
         <link rel="icon" href="{{ asset('smart_ico.png') }}">
 
         <!-- Fonts -->
@@ -22,7 +23,7 @@
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body class="font-sans antialiased" id="gradient">
+    <body class="font-sans antialiased dark" id="gradient">
         <x-banner />
 
         <div class="min-h-screen bg-transparent">
@@ -57,22 +58,13 @@
 
         // Default gradient colors
         const defaultColors = [
-            [236, 255, 220],
-            [236, 255, 220],
-            [236, 255, 220],
-            [236, 255, 220],
-            [236, 255, 220],
-            [236, 255, 220]
+            [47, 79, 79],    // Dark Slate Gray
+            [72, 61, 139],   // Dark Slate Blue
+            [0, 20, 0],      // Dark Green
+            [105, 105, 105], // Dim Gray
+            [25, 25, 112],   // Midnight Blue
+            [85, 107, 47]    // Dark Olive Green
         ];
-
-        // Utility to generate random colors
-        function generateRandomColor() {
-            return [
-                Math.floor(Math.random() * 256),
-                Math.floor(Math.random() * 256),
-                Math.floor(Math.random() * 256)
-            ];
-        }
 
         // Function to apply dynamic gradient
         function dynamicGradient() {
@@ -105,17 +97,11 @@
             step += gradientSpeed;
             if (step >= 1) {
                 step %= 1;
-                defaultColors[0] = defaultColors[1];
-                defaultColors[2] = defaultColors[3];
-
-                defaultColors[1] = generateRandomColor();
-                defaultColors[3] = generateRandomColor();
+                defaultColors.push(defaultColors.shift());
             }
         }
 
-
-        // Interval for linear gradient
-        setInterval(dynamicGradient, 200);
+        dynamicGradient()
 
     });
 </script>

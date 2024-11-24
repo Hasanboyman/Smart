@@ -83,7 +83,6 @@
             </div>
         </form>
 
-        <!-- Display current gradient colors -->
         <?php
         $gradient_colors = [];
         foreach (range(1, 6) as $i) {
@@ -114,26 +113,23 @@
         document.getElementById(id).style.backgroundColor = color;
     }
 
-    // Image preview
     document.getElementById('image').addEventListener('change', function (event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                // Create an image element and set the preview source to the file's data URL
                 const imagePreview = document.getElementById('imagePreview');
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.classList.add('mt-2', 'max-w-full', 'rounded', 'shadow');
                 img.alt = "Background Preview";
-                imagePreview.innerHTML = ''; // Clear previous preview
+                imagePreview.innerHTML = '';
                 imagePreview.appendChild(img);
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // Color liner gradient colors
     function updateGradientPreview() {
         const colors = Array.from(document.querySelectorAll('input[type="color"]'))
             .map(input => input.value)
@@ -153,7 +149,6 @@
         if (deleteButton) {
             deleteButton.addEventListener('click', function (e) {
                 e.preventDefault();
-
                 if (!confirm("Are you sure you want to delete the background image?")) {
                     return;
                 }
@@ -176,19 +171,20 @@
                             successNotification.classList.remove("hidden");
                             errorNotification.classList.add("hidden");
 
+
                             const previewDiv = document.getElementById('backgroundPreview');
                             if (previewDiv) {
                                 previewDiv.remove();
+                                const reload = location.reload()
+                                setTimeout(reload,3000)
                             }
 
                         } else {
-                            // Show error notification
                             notificationMessage.innerHTML = data.message || "Something went wrong.";
                             errorNotification.classList.remove("hidden");
                             successNotification.classList.add("hidden");
                         }
 
-                        // Hide notification after 3 seconds
                         setTimeout(function () {
                             successNotification.classList.add("hidden");
                             errorNotification.classList.add("hidden");
@@ -200,11 +196,9 @@
                         const notificationMessage = document.getElementById('notification-message');
                         const errorNotification = document.getElementById('error-notification');
 
-                        // Show generic error notification
                         notificationMessage.innerHTML = "An error occurred while deleting the background image.";
                         errorNotification.classList.remove("hidden");
 
-                        // Hide notification after 3 seconds
                         setTimeout(function () {
                             errorNotification.classList.add("hidden");
                         }, 3000);

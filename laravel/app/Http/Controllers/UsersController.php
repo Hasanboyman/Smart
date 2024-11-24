@@ -35,10 +35,12 @@ class UsersController extends Controller
         $user = persons::create([
             'full_name' => $request->full_name,
             'user_id' => $request->user_id,
-            'group' => $request->group,
+            'group' => $request->group ,
             'status' => $request->status,
             'gender' => $request->gender,
             'birthday' => $request->birthday,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return response()->json($user, 201);
@@ -94,28 +96,44 @@ class UsersController extends Controller
         return response()->json($groups);
     }
 
+
     public function pagination(Request $request)
     {
 
         $totalItems = persons::all()->count();
 
-        $totalPages = ceil(($totalItems - 8) / 9);
+        $totalPages = ceil($totalItems  / 9);
 
         $currentPage = $request->query('page', 1);
 
         $called_count = persons::where('status', 'called')->count();
 
-        $called_count = ceil(($called_count - 8) / 9);
+        $called_count = ceil($called_count / 9);
 
         $uncalled_count = persons::where('status', 'uncalled')->count();
 
-        $uncalled_count = ceil(($uncalled_count - 8) / 9);
+        $uncalled_count = ceil($uncalled_count / 9);
+
+        $group_it = persons::where('group', 'it')->count();
+
+        $group_it = ceil($group_it / 9);
+
+        $group_eng = persons::where('group', 'english')->count();
+
+        $group_eng = ceil($group_eng / 9);
+
+        $group_rus = persons::where('group', 'russian')->count();
+
+        $group_rus = ceil($group_rus / 9);
 
         return response()->json([
             'current_page' => $currentPage,
-            'total_pages' => $totalPages + 1,
-            'called_count' => $called_count + 1,
-            'uncalled_count' => $uncalled_count + 1,
+            'total_pages' => $totalPages ,
+            'called_count' => $called_count,
+            'uncalled_count' => $uncalled_count,
+            'it_count' => $group_it,
+            'eng_count' => $group_eng,
+            'rus_count' => $group_rus,
         ]);
     }
 

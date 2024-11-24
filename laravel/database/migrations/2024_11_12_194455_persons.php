@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->integer('user_id')->unique();
             $table->string('birthday')->nullable();
             $table->text('comment');
-            $table->string('status');
+            $table->string('status')->default('uncalled');
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->timestamps();
         });
